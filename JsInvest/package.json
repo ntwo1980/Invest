@@ -1,0 +1,16 @@
+{
+  "name": "js-invest",
+  "version": "0.0.0",
+  "description": "JsInvest",
+  "main": "app.js",
+  "author": {
+    "name": "NN1003"
+  },
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "jsdom": "^9.4.1",
+    "lodash": "^4.14.1",
+    "moment": "^2.14.1",
+    "q": "^1.4.1"
+  }
+}

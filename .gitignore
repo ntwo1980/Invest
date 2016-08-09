@@ -1,0 +1,7 @@
+*.vs
+node_modules/
+obj/
+typings/
+.Rhistory
+*.csv
+*.user
