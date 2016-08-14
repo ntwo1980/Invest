@@ -15,7 +15,7 @@ exports.getUrl = function (url) {
     var deferred = Q.defer();
 
     request({ url: url }, function (error, response, body) {
-        if (response.statusCode == 200)
+        if (response && response.statusCode == 200)
             deferred.resolve(body);
         else
             deferred.reject(error);

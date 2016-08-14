@@ -8,7 +8,7 @@
     $ = require('jquery')(window),
     Q = require("q"),
     qlimit = require("qlimit"),
-    limit = qlimit(5),
+    limit = qlimit(10),
     moment = require("moment"),
     nconf = require("nconf"),
     utils = require("./utils"),
@@ -20,17 +20,24 @@
     variableCount = csvhead.split(",").length,
     days = [],
     today = moment(),
+    endDate = today,
     config = {};
 
 exports.getData = function () {
     nconf.file({ file: configPath });
 
     date = nconf.get("gz:date"),
-        config.date = date ? date : "2009-10-30";
+        //config.date = date ? date : "2016-08-01";
+        config.date = date ? date : "2009-10-29";
 
-    var startDate = moment("2016-08-10"),
+    var startDate = moment(config.date).add(1, "days"),
         day = startDate,
-        dayDiff = day.diff(today, "days");
+        dayDiff = day.diff(endDate, "days");
+
+    if (dayDiff == 0) {
+        console.log("done");
+        return;
+    }
 
     while (dayDiff <= 0) {
         days.push(moment(day));
@@ -39,7 +46,7 @@ exports.getData = function () {
             break;
 
         day.add(1, "days");
-        dayDiff = day.diff(today, "days");
+        dayDiff = day.diff(endDate, "days");
     }
 
     var commands = _.map(days, limit(function (day) {
@@ -89,8 +96,8 @@ exports.getData = function () {
                     code: code,
                     name: name,
                     companyCount: companyCount,
-                    spe: spe,
-                    rpe: rpe
+                    spe: spe == "NA" ? "" : spe,
+                    rpe: rpe == "NA" ? "" : rpe
                 };
 
                 dailyData.data.push(record);
@@ -122,8 +129,10 @@ exports.getData = function () {
         });
 
         //console.log(stocks);
-        nconf.set('gz:date', today.format("YYYY-MM-DD"));
+        nconf.set('gz:date', endDate.format("YYYY-MM-DD"));
         nconf.save();
+
+        console.log("done");
     });
 
     function pushStockDailyData(stocks, dailyData) {
