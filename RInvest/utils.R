@@ -1,4 +1,4 @@
-get.percentile <- function(x, percentile.length, only.last = TRUE) {
+get.percentile <- function(x, percentile.length, only.last = T) {
     percentiles <- c()
     x.start <- ifelse(only.last == T, length(x), 1)
 
