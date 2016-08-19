@@ -1,7 +1,7 @@
 library("stringr")
 
 load.stocks.data <- function(file) {
-    data <- read.table(file, header = T, sep = ",", stringsAsFactors = F, fileEncoding = "utf-8",
+    data <- read.table(file, header = T, sep = ",", as.is = T, fileEncoding = "utf-8",
           colClasses = c("factor", "character", "Date", "numeric", "numeric", "numeric"),
           col.names = c("Code", "Name", "Date", "CompanyCount", "SPE", "RPE"))
     data <- sqldf("select Date, Code, Name, CompanyCount, SPE, RPE from data order by Date")
