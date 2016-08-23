@@ -89,7 +89,7 @@ last.day.data <- subset(last.day.data, Cost <= top25.value & !Down)
 
 print(last.day.data)
 
-hist(stocks210$PE, 20)
+hist(stocks813$PE, 20, xlab = "813", ylab = "PE", main = "")
 abline(v = tail(stocks210$PE, 1), col = "blue")
 
 # sqldf("select * from [monthly.stat] where UpRatio > 70 and Length > 4 order by MeanReturns desc")

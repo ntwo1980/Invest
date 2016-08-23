@@ -33,6 +33,7 @@
     <Compile Include="app.js" />
     <Compile Include="gz.js" />
     <Compile Include="sw.js" />
+    <Compile Include="syl.js" />
     <Compile Include="utils.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />

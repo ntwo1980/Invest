@@ -10,5 +10,6 @@ init.environment <- function() {
 init.environment()
 
 source("utils.R")
-source("sw.R")
+#source("sw.R")
 #source("gz.R")
+source("stocks.R")

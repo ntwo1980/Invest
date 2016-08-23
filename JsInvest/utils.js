@@ -1,7 +1,7 @@
 ﻿var fs = require('fs'),
     Q = require("q"),
-    //request = require("request").defaults({ proxy: "http://nn1003:Liu19875@sdcwsa01:80" });
-    request = require("request");
+    request = require("request").defaults({ proxy: "http://nn1003:Liu19875@sdcwsa01:80" });
+    //request = require("request");
 
 exports.existsFile = function (file) {
     var deferred = Q.defer();
@@ -15,6 +15,28 @@ exports.getUrl = function (url) {
     var deferred = Q.defer();
 
     request({ url: url }, function (error, response, body) {
+        if (response && response.statusCode == 200)
+            deferred.resolve(body);
+        else
+            deferred.reject(error);
+    });
+
+    return deferred.promise;
+}
+
+exports.postUrl = function (url, headers, body) {
+    var deferred = Q.defer(),
+        options = { url: url };
+
+    if (headers)
+        options.headers = headers;
+
+    if (body) {
+        options.body = body;
+        options.json = true;
+    }
+
+    request.post(options, function (error, response, body) {
         if (response && response.statusCode == 200)
             deferred.resolve(body);
         else
