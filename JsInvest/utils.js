@@ -1,7 +1,7 @@
 ﻿var fs = require('fs'),
     Q = require("q"),
-    request = require("request").defaults({ proxy: "http://nn1003:Liu19875@sdcwsa01:80" });
-    //request = require("request");
+    //request = require("request").defaults({ proxy: "http://nn1003:Liu19875@sdcwsa01:80" });
+    request = require("request");
 
 exports.existsFile = function (file) {
     var deferred = Q.defer();

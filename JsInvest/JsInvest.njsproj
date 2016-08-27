@@ -35,6 +35,7 @@
     <Compile Include="sw.js" />
     <Compile Include="syl.js" />
     <Compile Include="utils.js" />
+    <Compile Include="zz.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
