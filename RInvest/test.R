@@ -1,4 +1,4 @@
-backtest <- function(x, y, ma.period, vl, w, lp, hp) {
+backtest <- function(x, y, ma.period, v.ma.period, vl, w, lp, hp) {
     x <- xts(x[, -1], order.by = x[, 1])
     y <- xts(y[, -1], order.by = y[, 1])
 
@@ -7,7 +7,8 @@ backtest <- function(x, y, ma.period, vl, w, lp, hp) {
     names(dF) <- c("x", "y", "v", "va")
     dF <- dF[complete.cases(dF),]
     dF <- cbind(dF, apply(dF[, c("x", "y")], 2, SMA, n = ma.period))
-    names(dF)[5:6] <- c("xma", "yma")
+    dF <- cbind(dF, apply(dF[, c("v")], 2, EMA, n = v.ma.period))
+    names(dF)[5:7] <- c("xma", "yma", "vma")
 
     quantile.value <- function(x, q) {
         return(quantile(x, q))
@@ -23,9 +24,9 @@ backtest <- function(x, y, ma.period, vl, w, lp, hp) {
         x <- daily.deal[["x"]]
         y <- daily.deal[["y"]]
         v <- daily.deal[["v"]]
-        va <- daily.deal[["va"]]
         xma <- daily.deal[["xma"]]
         yma <- daily.deal[["yma"]]
+        vma <- daily.deal[["vma"]]
         low <- daily.deal[["lp"]]
         med <- daily.deal[["mp"]]
         high <- daily.deal[["hp"]]
@@ -35,7 +36,7 @@ backtest <- function(x, y, ma.period, vl, w, lp, hp) {
         value <- ifelse(value > 0, value, ifelse(!is.null(last.daily.deal), last.daily.deal["value"], 10000))
 
         if (x >= xma) {
-            if (yc > 0 && v < low && v > va) {
+            if (yc > 0 && v < low && v > vma) {
             # sell y, buy x
                 yc <- 0
                 xc <- value * 0.99 / x
@@ -51,7 +52,7 @@ backtest <- function(x, y, ma.period, vl, w, lp, hp) {
         }
 
         if (y >= yma) {
-            if (xc > 0 && v > high && v < va) {
+            if (xc > 0 && v > high && v < vma) {
             # sell x, buy y
                 xc <- 0
                 yc <- value * 0.99 / y
@@ -77,7 +78,7 @@ backtest <- function(x, y, ma.period, vl, w, lp, hp) {
     ldf <- dF[df.nrow,]
     ydf <- dF[df.nrow - 240,]
 
-    return(list(df = dF, tr = c(ma = ma.period, vl = vl, w = w, lp = lp, hp = hp, total.return = ldf$value / 10000, year.return = ldf$value / as.numeric(ydf$value))))
+    return(list(df = dF, tr = c(ma = ma.period, v.ma.period = v.ma.period, vl = vl, w = w, lp = lp, hp = hp, total.return = ldf$value / 10000, year.return = ldf$value / as.numeric(ydf$value))))
 }
 
 x <- stocks.whole790[, c("Date", "Close")]
@@ -93,11 +94,13 @@ tr <- NULL
     #}
 #}
 
-#for (w in seq(10, 40, 1)) {
-    #tr <- rbind(tr, backtest(x, y, ma.period = 39, w = 30, vl = 15, lp = 0.04, hp = 0.5)$tr)
+#for (l in seq(0, 0.5, 0.02)) {
+    #for (h in seq(0.5, 1, 0.02)) {
+        #tr <- rbind(tr, backtest(x, y, ma.period = 39, v.ma.period = 9, w = 30, vl = 5, lp = l, hp = h)$tr)
+    #}
 #}
 
-r <- backtest(x, y, ma.period = 39, w = 30, vl = 15, lp = 0.04, hp = 0.70)
+r <- backtest(x, y, ma.period = 39, v.ma.period = 9, w = 30, vl = 5, lp = 0.04, hp = 0.60)
 
 tr <- r$tr
 df <- r$df
