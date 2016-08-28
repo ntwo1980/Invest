@@ -78,27 +78,10 @@ rownames(pb.df) <- pb.df[[1]]
 pb.df[[1]] <- NULL
 pb.xts = as.xts(pb.df)
 
-#stocks813.copy <- stocks813
-#rownames(stocks813.copy) <- stocks813.copy$Date
-#stocks813.copy$Date <- NULL
-#stocks813.copy$Code <- NULL
-#stocks813.copy$Name <- NULL
-#stocks813.xts <- as.xts(stocks813.copy)
-#stocks811.copy <- stocks811
-#rownames(stocks811.copy) <- stocks811.copy$Date
-#stocks811.copy$Date <- NULL
-#stocks811.copy$Code <- NULL
-#stocks811.copy$Name <- NULL
-#stocks811.xts <- as.xts(stocks811.copy)
-
 
 x <- pb.xts[, 7]
 y <- pb.xts[, 8]
 
-#x <- stocks813.xts$PE
-#y <- stocks811.xts$PE
-
-#window_length <- 10
 
 dF <- cbind(x, y)
 names(dF) <- c("x", "y")
