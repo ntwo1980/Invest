@@ -34,21 +34,26 @@ backtest <- function(x, y, ma.period, v.ma.period, vl, w, lp, hp) {
         yc <- ifelse(!is.null(last.daily.deal), last.daily.deal["yc"], 0)
         value <- ifelse(xc > 0, xc * x, yc * y)
         value <- ifelse(value > 0, value, ifelse(!is.null(last.daily.deal), last.daily.deal["value"], 10000))
+        ot <- 0
 
         if (x >= xma) {
             if (yc > 0 && v < low && v > vma) {
             # sell y, buy x
                 yc <- 0
                 xc <- value * 0.99 / x
+                ot <- ot + 1
             }
 
             if (xc == 0 && yc == 0 && v < med) {
             #buy x
                 xc <- value * 0.995 / x
+                ot <- ot + 2
             }
         }
-        else if (y < yma) {
+        else if (xc > 0 && y < yma) {
             xc <- 0
+            value <- value * 0.995
+            ot <- ot + 4
         }
 
         if (y >= yma) {
@@ -56,19 +61,23 @@ backtest <- function(x, y, ma.period, v.ma.period, vl, w, lp, hp) {
             # sell x, buy y
                 xc <- 0
                 yc <- value * 0.99 / y
+                ot <- ot + 8
             }
 
             if (xc == 0 && yc == 0 && v > med) {
             #buy y
                 yc <- value * 0.995 / y
+                ot <- ot + 16
             }
         }
-        else if (x < xma) {
+        else if (yc > 0 && x < xma) {
             yc <- 0
+            value <- value * 0.995
+            ot <- ot + 32
         }
 
         last.daily.deal <<- c(daily.deal, xc = xc, yc = yc, value = value)
-        return(c(xc = xc, yc = yc, value = value))
+        return(c(xc = xc, yc = yc, value = value, ot = ot))
     }))
 
     rownames(d) <- NULL
@@ -78,7 +87,7 @@ backtest <- function(x, y, ma.period, v.ma.period, vl, w, lp, hp) {
     ldf <- dF[df.nrow,]
     ydf <- dF[df.nrow - 240,]
 
-    return(list(df = dF, tr = c(ma = ma.period, v.ma.period = v.ma.period, vl = vl, w = w, lp = lp, hp = hp, total.return = ldf$value / 10000, year.return = ldf$value / as.numeric(ydf$value))))
+    return(list(df = dF, tr = c(ma.period = ma.period, v.ma.period = v.ma.period, vl = vl, w = w, lp = lp, hp = hp, total.return = ldf$value / 10000, year.return = ldf$value / as.numeric(ydf$value))))
 }
 
 x <- stocks.whole790[, c("Date", "Close")]
