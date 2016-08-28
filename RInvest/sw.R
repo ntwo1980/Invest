@@ -85,9 +85,9 @@ last.day.data <- transform(last.day.data,
 
 last.day.data <- sqldf("select * from [last.day.data] order by PEBP")
 top25.value <- quantile(last.day.data$Cost)[4]
-last.day.data <- subset(last.day.data, Cost <= top25.value & !Down)
+last.day <- subset(last.day.data, Cost <= top25.value & !Down)
 
-print(last.day.data)
+print(last.day)
 
 #hist(stocks813$PE, 20, xlab = "813", ylab = "PE", main = "")
 #abline(v = tail(stocks210$PE, 1), col = "blue")
