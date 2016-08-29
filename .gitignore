@@ -5,3 +5,4 @@ typings/
 .Rhistory
 *.csv
 *.user
+*.TMP

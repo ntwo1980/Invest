@@ -92,8 +92,9 @@ backtest <- function(x, y, ma.period, v.ma.period, vl, w, lp, hp) {
 
 x <- stocks.whole790[, c("Date", "Close")]
 y <- stocks.whole150[, c("Date", "Close")]
+#x <- stocks.whole790[(nrow(stocks.whole790) - 300):nrow(stocks.whole790), c("Date", "Close")]
+#y <- stocks.whole150[(nrow(stocks.whole150) - 300):nrow(stocks.whole150), c("Date", "Close")]
 tr <- NULL
-
 #for (m in seq(39, 40)) {
     #print(m)
     #for (l in seq(0, 0.5, 0.02)) {
@@ -103,13 +104,20 @@ tr <- NULL
     #}
 #}
 
-#for (l in seq(0, 0.5, 0.02)) {
-    #for (h in seq(0.5, 1, 0.02)) {
-        #tr <- rbind(tr, backtest(x, y, ma.period = 39, v.ma.period = 9, w = 30, vl = 5, lp = l, hp = h)$tr)
+#for (m in seq(30, 40, 1)) {
+    #for (l in seq(0, 0.5, 0.02)) {
+        #for (h in seq(0.5, 1, 0.02)) {
+            #tr <- rbind(tr, backtest(x, y, ma.period = m, v.ma.period = 9, w = 30, vl = 5, lp = l, hp = h)$tr)
+        #}
     #}
 #}
 
-r <- backtest(x, y, ma.period = 39, v.ma.period = 9, w = 30, vl = 5, lp = 0.04, hp = 0.60)
+#for (ma in seq(3, 40, 1)) {
+    #tr <- rbind(tr, backtest(x, y, ma.period = ma, v.ma.period = 3, w = 15, vl = 5, lp = 0, hp = 0.6)$tr)
+#}
+
+r <- backtest(x, y, ma.period = 39, v.ma.period = 9, w = 30, vl = 5, lp = 0.04, hp = 0.60)  # long
+#r <- backtest(x, y, ma.period = 33, v.ma.period = 3, w = 15, vl = 5, lp = 0.0, hp = 0.60)  # short
 
 tr <- r$tr
 df <- r$df
