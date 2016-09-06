@@ -3,7 +3,7 @@ source("utils.R")
 pb.priority <- c("801780", "801790")
 
 core.data <- function(x) {
-    data = x[, c("Code", "Name", "Date", "Close", "CM", "PE", "PEM", "PB", "PBM", "ROE", "Cost", "Ret", "CP", "PEP", "PBP", "VP")]
+    data = x[c("Code", "Name", "Date", "Close", "CM", "PE", "PEM", "PB", "PBM", "ROE", "Cost", "Ret", "CP", "PEP", "PBP", "VP")]
 
     return(data)
 }
@@ -13,7 +13,7 @@ load.stocks.data <- function(file) {
           colClasses = c("factor", "character", "Date", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "NULL", "NULL", "NULL", "NULL"),
           col.names = c("Code", "Name", "Date", "Open", "High", "Low", "Close", "Volumn", "Amount", "Change", "Turnover", "PE", "PB", "Price", "AmountPercentage", "HQLTSZ", "AHQLTSZ", "Payout"))
     data <- sqldf("select Date, Code, Name, Open, Close, High, Low, Volumn, PE, PB, Price from data order by Date")
-    percentiles <- apply(data[, c("Close", "PE", "PB", "Volumn")], 2, get.percentile, percentile.length = 240, only.last = T)
+    percentiles <- apply(data[c("Close", "PE", "PB", "Volumn")], 2, get.percentile, percentile.length = 240, only.last = T)
 
     data <- transform(data,
                     CM = median(get.data.year(Close, 1), na.rm = T),
